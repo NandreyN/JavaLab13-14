@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Data>
+    <Terms>
+        <Term number="1">[MA, GA, History]</Term>
+        <Term number="2">[MA, Programming, GA]</Term>
+    </Terms>
+    <Records>
+        <Record>
+            <RecordbookNumber>100100</RecordbookNumber>
+            <Surname>Ivanov</Surname>
+            <TermNumber>1</TermNumber>
+            <Subject>GA</Subject>
+            <Mark>8</Mark>
+        </Record>
+        <Record>
+            <RecordbookNumber>100150</RecordbookNumber>
+            <Surname>Petrov</Surname>
+            <TermNumber>2</TermNumber>
+            <Subject>GA</Subject>
+            <Mark>5</Mark>
+        </Record>
+        <Record>
+            <RecordbookNumber>120458</RecordbookNumber>
+            <Surname>Sidorov</Surname>
+            <TermNumber>1</TermNumber>
+            <Subject>GA</Subject>
+            <Mark>9</Mark>
+        </Record>
+        <Record>
+            <RecordbookNumber>100100</RecordbookNumber>
+            <Surname>Ivanov</Surname>
+            <TermNumber>1</TermNumber>
+            <Subject>MA</Subject>
+            <Mark>10</Mark>
+        </Record>
+        <Record>
+            <RecordbookNumber>100100</RecordbookNumber>
+            <Surname>Ivanov</Surname>
+            <TermNumber>1</TermNumber>
+            <Subject>History</Subject>
+            <Mark>6</Mark>
+        </Record>
+        <Record>
+            <RecordbookNumber>100150</RecordbookNumber>
+            <Surname>Petrov</Surname>
+            <TermNumber>2</TermNumber>
+            <Subject>MA</Subject>
+            <Mark>2</Mark>
+        </Record>
+        <Record>
+            <RecordbookNumber>64755</RecordbookNumber>
+            <Surname>Kravchuk</Surname>
+            <TermNumber>1</TermNumber>
+            <Subject>History</Subject>
+            <Mark>8</Mark>
+        </Record>
+
+        <Record>
+            <RecordbookNumber>458744</RecordbookNumber>
+            <Surname>naumovich</Surname>
+            <TermNumber>1</TermNumber>
+            <Subject>GA</Subject>
+            <Mark>9</Mark>
+        </Record>
+        <Record>
+            <RecordbookNumber>458744</RecordbookNumber>
+            <Surname>naumovich</Surname>
+            <TermNumber>1</TermNumber>
+            <Subject>History</Subject>
+            <Mark>9</Mark>
+        </Record>
+    </Records>
+</Data>

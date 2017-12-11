@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="9" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="Record">
+    <void property="mark">
+     <string>8</string>
+    </void>
+    <void property="recordBookNumber">
+     <string>100100</string>
+    </void>
+    <void property="subject">
+     <string>GA</string>
+    </void>
+    <void property="surname">
+     <string>Ivanov</string>
+    </void>
+    <void property="termNumber">
+     <string>1</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="Record">
+    <void property="mark">
+     <string>5</string>
+    </void>
+    <void property="recordBookNumber">
+     <string>100150</string>
+    </void>
+    <void property="subject">
+     <string>GA</string>
+    </void>
+    <void property="surname">
+     <string>Petrov</string>
+    </void>
+    <void property="termNumber">
+     <string>2</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="Record">
+    <void property="mark">
+     <string>9</string>
+    </void>
+    <void property="recordBookNumber">
+     <string>120458</string>
+    </void>
+    <void property="subject">
+     <string>GA</string>
+    </void>
+    <void property="surname">
+     <string>Sidorov</string>
+    </void>
+    <void property="termNumber">
+     <string>1</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="Record">
+    <void property="mark">
+     <string>10</string>
+    </void>
+    <void property="recordBookNumber">
+     <string>100100</string>
+    </void>
+    <void property="subject">
+     <string>MA</string>
+    </void>
+    <void property="surname">
+     <string>Ivanov</string>
+    </void>
+    <void property="termNumber">
+     <string>1</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="Record">
+    <void property="mark">
+     <string>6</string>
+    </void>
+    <void property="recordBookNumber">
+     <string>100100</string>
+    </void>
+    <void property="subject">
+     <string>History</string>
+    </void>
+    <void property="surname">
+     <string>Ivanov</string>
+    </void>
+    <void property="termNumber">
+     <string>1</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="Record">
+    <void property="mark">
+     <string>2</string>
+    </void>
+    <void property="recordBookNumber">
+     <string>100150</string>
+    </void>
+    <void property="subject">
+     <string>MA</string>
+    </void>
+    <void property="surname">
+     <string>Petrov</string>
+    </void>
+    <void property="termNumber">
+     <string>2</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="Record">
+    <void property="mark">
+     <string>8</string>
+    </void>
+    <void property="recordBookNumber">
+     <string>64755</string>
+    </void>
+    <void property="subject">
+     <string>History</string>
+    </void>
+    <void property="surname">
+     <string>Kravchuk</string>
+    </void>
+    <void property="termNumber">
+     <string>1</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>
