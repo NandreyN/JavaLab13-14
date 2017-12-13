@@ -54,20 +54,12 @@
             <Subject>History</Subject>
             <Mark>8</Mark>
         </Record>
-
         <Record>
-            <RecordbookNumber>458744</RecordbookNumber>
-            <Surname>naumovich</Surname>
+            <RecordbookNumber>64654</RecordbookNumber>
+            <Surname>Naumovich</Surname>
             <TermNumber>1</TermNumber>
             <Subject>GA</Subject>
-            <Mark>9</Mark>
-        </Record>
-        <Record>
-            <RecordbookNumber>458744</RecordbookNumber>
-            <Surname>naumovich</Surname>
-            <TermNumber>1</TermNumber>
-            <Subject>History</Subject>
-            <Mark>9</Mark>
+            <Mark>10</Mark>
         </Record>
     </Records>
 </Data>

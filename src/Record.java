@@ -1,9 +1,12 @@
 import java.util.*;
 
-class RecordSurnameComparator implements Comparator<Record>
+class RecordFailComparator implements Comparator<Record>
 {
     @Override
     public int compare(Record o1, Record o2) {
+        int subjCompRes = o1.getSubject().compareTo(o2.getSubject());
+        if (subjCompRes != 0)
+            return subjCompRes;
         return o1.getSurname().compareTo(o2.getSurname());
     }
 }

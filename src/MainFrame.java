@@ -27,38 +27,11 @@ import java.util.List;
  * Построить алфавитный список студентов, которые не сдали все экзамены в соответствующем семестре
  * (сортировка сразу по экзамену, затем по студенту).
  */
-class Student {
-    private String recordBook;
-    private String surname;
-
-    public Student(String recordBook, String surname) {
-        this.recordBook = recordBook;
-        this.surname = surname;
-    }
-
-    public Student(Student st) {
-        this.recordBook = st.getRecordBook();
-        this.surname = st.getSurname();
-    }
-
-    public String getRecordBook() {
-        return recordBook;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String toString() {
-        return getRecordBook() + " " + getSurname();
-    }
-}
-
 class MyTableModel extends AbstractTableModel {
     private List<Record> records;
     private HashMap<Integer, HashSet<String>> subjects;
     private static final String[] HEADERS = {"Record Book", "Surname", "Term", "Subject", "Mark"};
-    private List<Student> filtered;
+    private List<Record> filtered;
 
     public MyTableModel(List<Record> records, HashMap<Integer, HashSet<String>> subjects) {
         this.records = new ArrayList<Record>(records);
@@ -69,7 +42,7 @@ class MyTableModel extends AbstractTableModel {
         return records;
     }
 
-    public void writeXmlFile() throws ParserConfigurationException, TransformerConfigurationException {
+    public void writeXmlFile(String absolutePath) throws ParserConfigurationException, TransformerConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.newDocument();
@@ -88,8 +61,7 @@ class MyTableModel extends AbstractTableModel {
 
         Element recordsRoot = doc.createElement("Records");
         root.appendChild(recordsRoot);
-        for(Record record : records)
-        {
+        for (Record record : records) {
             Element recordElement = doc.createElement("Record");
 
             Element element = doc.createElement("RecordbookNumber");
@@ -124,14 +96,11 @@ class MyTableModel extends AbstractTableModel {
         DOMSource source = new DOMSource(doc);
         try {
             // location and name of XML file you can change as per need
-            FileWriter fos = new FileWriter("./ros.xml");
+            FileWriter fos = new FileWriter(absolutePath);
             StreamResult result = new StreamResult(fos);
             transformer.transform(source, result);
 
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        } catch (TransformerException e) {
+        } catch (IOException | TransformerException e) {
             e.printStackTrace();
         }
     }
@@ -141,9 +110,13 @@ class MyTableModel extends AbstractTableModel {
         return record.get().getTermNumber();
     }
 
-    List<Student> getFilteredData() {
-        filtered = new ArrayList<Student>();
-        List<String> recBooks = new ArrayList<String>();
+    public boolean isModelValid() {
+        return !subjects.isEmpty();
+    }
+
+    public List<Record> getFilteredData() {
+        filtered = new ArrayList<Record>();
+        //List<String> recBooks = new ArrayList<String>();
 
         HashMap<String, HashSet<String>> studentSubjectsAggregator = new HashMap<>();
         for (Record r : records) {
@@ -152,27 +125,23 @@ class MyTableModel extends AbstractTableModel {
             studentSubjectsAggregator.get(r.getRecordBookNumber()).add(r.getSubject());
         }
 
-        for (Map.Entry<String, HashSet<String>> pair : studentSubjectsAggregator.entrySet()) {
-            // get course now by record book number
-            String term = getTermByRecBookNumber(pair.getKey());
-            if (pair.getValue().size() != subjects.get(Integer.parseInt(term)).size()) {
-                recBooks.add(pair.getKey());
-                continue;
-            }
-
-            for (String subj : subjects.get(Integer.parseInt(term))) {
-                if (!pair.getValue().contains(subj)) {
-                    recBooks.add(pair.getKey());
-                    break;
+        Iterator<Map.Entry<String, HashSet<String>>> it = studentSubjectsAggregator.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, HashSet<String>> entry = it.next();
+            String term = getTermByRecBookNumber(entry.getKey());
+            HashSet<String> subjSetCopy = new HashSet<>(subjects.get(Integer.parseInt(term)));
+            subjSetCopy.removeAll(entry.getValue());
+            if (!subjSetCopy.isEmpty()) {
+                Record failed = new Record(records.stream().filter(x -> x.getRecordBookNumber().equals(entry.getKey())).findFirst().get());
+                for (String subjFailed : subjSetCopy) {
+                    failed = new Record(failed);
+                    failed.setMark("");
+                    failed.setSubject(subjFailed);
+                    filtered.add(failed);
                 }
             }
         }
-
-        List<Record> copy = new ArrayList<>(records);
-        for (String rb : recBooks) {
-            Record rec = copy.stream().filter(x -> x.getRecordBookNumber().equals(rb)).findFirst().get();
-            filtered.add(new Student(rec.getRecordBookNumber(), rec.getSurname()));
-        }
+        filtered.sort(new RecordFailComparator());
         return filtered;
     }
 
@@ -266,14 +235,14 @@ class RecordHandler extends DefaultHandler {
                     if (subjects.get(i).size() == 0) {
                         HashSet<String> s = new HashSet<>();
                         StringTokenizer tokenizer = new StringTokenizer(input, "[, ]");
-                        while (tokenizer.hasMoreTokens())
-                        {
+                        while (tokenizer.hasMoreTokens()) {
                             s.add(tokenizer.nextToken());
                         }
 
                         subjects.put(i, s);
                         break;
                     }
+
                 }
                 break;
 
@@ -337,11 +306,11 @@ public class MainFrame extends JFrame {
         openMenuItem = new JMenuItem("Open");
         saveMenuItem = new JMenuItem("Save");
         addItem = new JMenuItem("Add");
+        addItem.setEnabled(false);
         fileMenu.add(openMenuItem);
         fileMenu.add(saveMenuItem);
         fileMenu.add(addItem);
-        //filteredTableModel = new MyTableModel(new ArrayList<>(), new HashMap<>());
-        //filteredTable = new JTable(filteredTableModel);
+
         listModel = new DefaultListModel<>();
         filteredList = new JList<>(listModel);
 
@@ -380,6 +349,7 @@ public class MainFrame extends JFrame {
                     }
 
                     try {
+                        addItem.setEnabled(false);
                         SAXParserFactory factory = SAXParserFactory.newDefaultInstance();
                         SAXParser parser = factory.newSAXParser();
                         RecordHandler handler = new RecordHandler();
@@ -389,18 +359,14 @@ public class MainFrame extends JFrame {
                         tableModel = (MyTableModel) table.getModel();
                         tableModel.fireTableDataChanged();
 
-                        List<Student> rc = tableModel.getFilteredData();
-                        DefaultListModel<String> newListModel = new DefaultListModel<>();
-                        rc.stream().forEach(x -> newListModel.addElement(x.toString()));
-
-                        filteredList.setModel(newListModel);
-                        filteredList.repaint();
-
-                    } catch (SAXException e1) {
-                        e1.printStackTrace();
-                    } catch (ParserConfigurationException e1) {
-                        e1.printStackTrace();
-                    } catch (IOException e1) {
+                        updateFailList();
+                        if (tableModel.isModelValid())
+                            addItem.setEnabled(true);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "XML file is not valid");
+                        }
+                    } catch (SAXException | ParserConfigurationException | IOException e1) {
                         e1.printStackTrace();
                     }
 
@@ -426,10 +392,8 @@ public class MainFrame extends JFrame {
                             return;
                         }
                     try {
-                        tableModel.writeXmlFile();
-                    } catch (ParserConfigurationException e1) {
-                        e1.printStackTrace();
-                    } catch (TransformerConfigurationException e1) {
+                        tableModel.writeXmlFile(file.getAbsolutePath());
+                    } catch (ParserConfigurationException | TransformerConfigurationException e1) {
                         e1.printStackTrace();
                     }
                 }
@@ -448,13 +412,26 @@ public class MainFrame extends JFrame {
         this.setJMenuBar(menuBar);
     }
 
+    private void updateFailList() {
+        List<Record> rc = tableModel.getFilteredData();
+        DefaultListModel<String> newListModel = new DefaultListModel<>();
+        rc.stream().forEach(x -> newListModel.addElement(x.toString()));
+
+        filteredList.setModel(newListModel);
+        filteredList.repaint();
+    }
+
     private void callModalInput() {
         inputDialog = new InputDialog(this);
         inputDialog.setBounds(0, 0, 800, 100);
         inputDialog.setVisible(true);
 
         Record toAdd = inputDialog.getRecord();
+        if (toAdd == null)
+            return;
+
         tableModel.addValue(toAdd);
+        updateFailList();
     }
 
     public static void main(String args[]) {

@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 class InputDialog extends JDialog {
 
@@ -20,7 +23,6 @@ class InputDialog extends JDialog {
 
         cancelButton = new JButton("Cancel");
         okButton = new JButton("Ok");
-        record = new Record();
 
         editBoxPanel = new JPanel(new GridLayout(1, 5));
 
@@ -29,6 +31,20 @@ class InputDialog extends JDialog {
         editBoxPanel.add(subjectField);
         editBoxPanel.add(termField);
         editBoxPanel.add(markField);
+
+
+        MouseListener focusHandler = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                ((JTextField)e.getSource()).setText("");
+            }
+        };
+
+        for (int i = 0; i< editBoxPanel.getComponentCount();i++)
+        {
+            editBoxPanel.getComponent(i).addMouseListener(focusHandler);
+        }
 
         buttonsPanel = new JPanel(new GridLayout(1, 2));
         buttonsPanel.add(okButton);
@@ -42,6 +58,7 @@ class InputDialog extends JDialog {
         okButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                record = new Record();
                 record.setSurname(surnameField.getText());
                 record.setMark(markField.getText());
                 record.setTermNumber(termField.getText());
@@ -54,6 +71,13 @@ class InputDialog extends JDialog {
                 }
 
                 JOptionPane.showMessageDialog(null, "Please fill in fileds correctly.");
+            }
+        });
+
+        cancelButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
             }
         });
     }
